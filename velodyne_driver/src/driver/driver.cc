@@ -34,7 +34,7 @@ VelodyneDriver::VelodyneDriver(ros::NodeHandle node,
   config_.frame_id = tf::resolve(tf_prefix, config_.frame_id);
 
   // get model name, validate string, determine packet rate
-  private_nh.param("model", config_.model, std::string("64E"));
+  private_nh.param("model", config_.model, std::string("64E_S3"));
   double packet_rate;                   // packet frequency (Hz)
   std::string model_full_name;
   if ((config_.model == "64E_S2") || 
@@ -42,6 +42,11 @@ VelodyneDriver::VelodyneDriver(ros::NodeHandle node,
     {                                   // 1 packet holds 384 points
       packet_rate = 3472.17;            // 1333312 / 384
       model_full_name = std::string("HDL-") + config_.model;
+    }
+  else if (config_,model == "64E_S3")    // generate 1333120 ppoints per second
+    {
+       packet_rate = 3471.66;             // 1 packet holds 384 points   1333120/384
+       model_full_name = std::string("HDL-") + config_.model;
     }
   else if (config_.model == "64E")
     {
